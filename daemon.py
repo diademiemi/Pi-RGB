@@ -3,6 +3,7 @@
 import socket
 import os
 import argparse
+from threading import Thread
 from gpiozero import PWMLED
 from daemonize import Daemonize
 from time import sleep
@@ -13,6 +14,7 @@ pid = "/tmp/.rgbled-controller.pid"
 parser = argparse.ArgumentParser()
 parser.add_argument("-a", "--address", help="Specify address used for daemon process, falls back to .env file, defaults to 127.0.0.1", action="store")
 parser.add_argument("-p", "--port", help="Specify port used for daemon process, falls back to .env file, defaults to 5807", action="store", type=int)
+parser.add_argument("-f", "--foreground", help="Runs application in foreground for debugging", action="store_true")
 
 args = parser.parse_args()
 load_dotenv()
@@ -41,6 +43,15 @@ def set(hex):
 	g.value = rgbv[1]/255
 	b.value = rgbv[2]/255
 
+# Function to strobe colours, calls on the set function to apply them
+def strobe(instructions):
+	while True:
+		for colour in instructions[2:]:
+			set(colour)
+			sleep(float(instructions[1]))
+			if stopthread is True:
+				return
+
 def main():
 	# Set r, g and b as global variables and define them
 	# I had to define them here because of a weird quirk in the Daemonize library, this was a headache
@@ -50,14 +61,32 @@ def main():
 	r = PWMLED(os.getenv('GPIO_RED'))
 	g = PWMLED(os.getenv('GPIO_GREEN'))
 	b = PWMLED(os.getenv('GPIO_BLUE'))
-
+	
+	# Define UDP socket and bind to it
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	sock.bind((address, port))
+
+	# Create variable which is checked by threads to see if they should stop
+	global stopthread
 
 	# Continue listening for input
 	while True:
 		data, addr = sock.recvfrom(1024)
-		set(data.decode('ascii'))
+		instructions = data.decode('ascii').split(",")
+		print(instructions)
+
+		if 'cthread' in locals():
+			stopthread = True
+			cthread.join()
+		if instructions[0] == 'single':
+			set(instructions[1])
+		if instructions[0] == 'strobe':
+			stopthread = False
+			cthread = Thread(target=strobe, args=(instructions,))
+			cthread.start()
+
+if args.foreground:
+	main()
 
 # Start the daemon process
 daemon = Daemonize(app="rgbled-controller", pid=pid, action=main)
