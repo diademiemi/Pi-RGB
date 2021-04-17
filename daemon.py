@@ -3,6 +3,7 @@
 import socket
 import os
 import argparse
+from colour import Color
 from threading import Thread
 from gpiozero import PWMLED
 from daemonize import Daemonize
@@ -34,14 +35,34 @@ else:
 	if port is None:
 		port = 5807
 
+# Function for gradients https://stackoverflow.com/a/20586224
+# Modified to return a list of hex codes
+def LerpColour(c1,c2,t):
+    return (c1[0]+(c2[0]-c1[0])*t,c1[1]+(c2[1]-c1[1])*t,c1[2]+(c2[2]-c1[2])*t)
+
+def gradient(colours):
+	gradient = []
+	for i in range(len(colours)):
+		for j in range(100):
+			gradient.append(LerpColour(colours[i],colours[i+1],j/100))
+		return gradient
+
 # Function which sets the LED strips according to a given hex colour
+# Used for static colours
 def set(hex):
-	hex = hex.lstrip('#')
 	length = len(hex)
 	rgbv = tuple(int(hex[i:i + length // 3], 16) for i in range(0, length, length // 3))
 	r.value = rgbv[0]/255
 	g.value = rgbv[1]/255
 	b.value = rgbv[2]/255
+
+# Function which sets the LED strips according to RGB values formatted like 0, 1, 0
+# Used for gradients
+def setRGB(rgbv):
+	r.value = rgbv[0]
+	g.value = rgbv[1]
+	b.value = rgbv[2]
+
 
 # Function to strobe colours, calls on the set function to apply them
 def strobe(instructions):
@@ -49,6 +70,31 @@ def strobe(instructions):
 		for colour in instructions[2:]:
 			set(colour)
 			sleep(float(instructions[1]))
+			if stopthread is True:
+				return
+
+
+# Function to fade colours, calls on the set function to apply them
+def fade(instructions):
+	while True:
+		for colour in instructions[2:]:
+			set(colour)
+			sleep(float(instructions[1]))
+			if stopthread is True:
+				return
+
+# Function to breathe colours, calls on the set function to apply them
+def breathe(instructions):
+	while True:
+		for colour in instructions[2:]:
+			list_of_colors = [Color("#000000").rgb, Color("#{0}".format(colour)).rgb]
+			steps = gradient(list_of_colors)
+			for step in steps:
+				setRGB(step)
+				sleep(float(instructions[1])/100)
+			for step in reversed(steps):
+				setRGB(step)
+				sleep(float(instructions[1])/100)
 			if stopthread is True:
 				return
 
@@ -84,6 +130,15 @@ def main():
 			stopthread = False
 			cthread = Thread(target=strobe, args=(instructions,))
 			cthread.start()
+		if instructions[0] == 'fade':
+			stopthread = False
+			cthread = Thread(target=fade, args=(instructions,))
+			cthread.start()
+		if instructions[0] == 'breathe':
+			stopthread = False
+			cthread = Thread(target=breathe, args=(instructions,))
+			cthread.start()
+
 
 if args.foreground:
 	main()
