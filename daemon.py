@@ -63,6 +63,10 @@ def setRGB(rgbv):
 	g.value = rgbv[1]
 	b.value = rgbv[2]
 
+# Animated functions. These check for a variable called stopthread 
+# every loop. This will be set to true if another colour is sent,
+# and this loop will exit, allowing for the new colour to be set.
+
 # Function to strobe colours, calls on the set function to apply them
 def strobe(instructions):
 	while True:
