@@ -127,7 +127,7 @@ def main():
 			stopthread = True
 			cthread.join()
 		if instructions[0] == 'single':
-			set(instructions[1])
+			set(instructions[-1])
 		if instructions[0] == 'strobe':
 			stopthread = False
 			cthread = Thread(target=strobe, args=(instructions,))

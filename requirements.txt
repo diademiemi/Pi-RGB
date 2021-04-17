@@ -2,3 +2,4 @@ gpiozero
 python-dotenv
 daemonize
 colour
+pyyaml
