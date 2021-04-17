@@ -9,5 +9,4 @@ However, it should work with any LED which has a pin for red, green and blue, yo
 # TO IMPLEMENT
 * CSS Colours  
 * Automatic detection for CSS colours or hex  
-* Multi colour patterns: breathe, fade  
 * file to define presets  

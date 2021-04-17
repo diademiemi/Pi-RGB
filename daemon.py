@@ -63,7 +63,6 @@ def setRGB(rgbv):
 	g.value = rgbv[1]
 	b.value = rgbv[2]
 
-
 # Function to strobe colours, calls on the set function to apply them
 def strobe(instructions):
 	while True:
@@ -73,13 +72,16 @@ def strobe(instructions):
 			if stopthread is True:
 				return
 
-
 # Function to fade colours, calls on the set function to apply them
 def fade(instructions):
 	while True:
-		for colour in instructions[2:]:
-			set(colour)
-			sleep(float(instructions[1]))
+		for i in range(2, len(instructions)):
+			list_of_colors = [Color("#{0}".format(instructions[i])).rgb]
+			list_of_colors.append(Color("#{0}".format(instructions[i+1])).rgb if i != len(instructions) - 1 else Color("#{0}".format(instructions[2])).rgb)
+			steps = gradient(list_of_colors)
+			for step in steps:
+				setRGB(step)
+				sleep(float(instructions[1])/100)
 			if stopthread is True:
 				return
 
@@ -138,7 +140,6 @@ def main():
 			stopthread = False
 			cthread = Thread(target=breathe, args=(instructions,))
 			cthread.start()
-
 
 if args.foreground:
 	main()
