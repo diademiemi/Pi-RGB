@@ -22,7 +22,7 @@ If you do not want the process to run in the background, add `-f`, this will als
 You can now interface with this daemon with the `controller.py` script. By default it will attempt to communicate to 127.0.0.1. If you want to connect over network, you will have to change `CONNECT_ADDRESS` in `.env` or pass `-a x.x.x.x`. In all options, command arguments are given precedent over the `.env` file.  
 `./controller.py -c red`  
 Connect to an address:  
-`./controller.py -c 192.168.2.241`  
+`./controller.py -a 192.168.2.241 -c red`  
 
 
 ### Setting colours
