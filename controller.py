@@ -2,6 +2,7 @@
 
 import socket
 import os
+from colour import Color
 from dotenv import load_dotenv
 
 import argparse
@@ -42,18 +43,32 @@ else:
 	if time is None:
 		time = float(1)
 
+def format(input):
+	colours = input.split(",")
+	output = []
+	for colour in colours:
+		if colour.startswith("#"):
+			output.append(colour.replace('#', ''))
+		else:
+			output.append(Color(colour).hex_l.replace('#', ''))
+	return output
+			
 
 # Main function, this sends the data to the daemon process
 def main():
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 	if args.colour:
-		data = "single,{0}".format("".join(args.colour.replace('#', '').split(',', 1)[0])).encode('ascii')
+		c = format(args.colour)
+		data = "single,{0}".format(",".join(c)).encode('ascii')
 	if args.strobe:
-		data = "strobe,{0},{1}".format(time, "".join(args.strobe.replace('#', '').split())).encode('ascii')
+		c = format(args.strobe)
+		data = "strobe,{0},{1}".format(time, ",".join(c)).encode('ascii')
 	if args.fade:
-		data = "fade,{0},{1}".format(time, "".join(args.fade.replace('#', '').split())).encode('ascii')
+		c = format(args.fade)
+		data = "fade,{0},{1}".format(time, ",".join(c)).encode('ascii')
 	if args.breathe:
-		data = "breathe,{0},{1}".format(time, "".join(args.breathe.replace('#', '').split())).encode('ascii')
+		c = format(args.breathe)
+		data = "breathe,{0},{1}".format(time, ",".join(c)).encode('ascii')
 
 	sock.sendto(data, (address, port))
 

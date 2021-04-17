@@ -7,6 +7,4 @@ I am creating this for the LED strip I wired to a Raspberry Pi following this gu
 However, it should work with any LED which has a pin for red, green and blue, you can customize the GPIO pins in the .env file.  
 
 # TO IMPLEMENT
-* CSS Colours  
-* Automatic detection for CSS colours or hex  
 * file to define presets  
