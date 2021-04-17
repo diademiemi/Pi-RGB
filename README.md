@@ -19,7 +19,7 @@ Listening on all addresses:
 `./daemon.py -a 0.0.0.0`  
 If you do not want the process to run in the background, add `-f`, this will also print every input it receives from the controller script, and any errors.  
 
-You can now interface with this daemon with the `controller.py` script. By default it will attempt to communicate to 127.0.0.1, you will have to change `CONNECT_ADDRESS` in `.env` or pass `-a x.x.x.x`. In all options, command arguments are given precedent over the `.env` file.  
+You can now interface with this daemon with the `controller.py` script. By default it will attempt to communicate to 127.0.0.1. If you want to connect over network, you will have to change `CONNECT_ADDRESS` in `.env` or pass `-a x.x.x.x`. In all options, command arguments are given precedent over the `.env` file.  
 `./controller.py -c red`  
 Connect to an address:  
 `./controller.py -c 192.168.2.241`  
@@ -31,7 +31,7 @@ There are 4 types of colour settings: single, strobe, fade and breathe.
 
 To set a single static colour, pass `-c` followed by a colour name as defined by [W4C](https://www.w3.org/TR/css-color-3/#svg-color) or a 6-digit hex code. To use a hex code, prefix it with #, this will likely require you to escape the argument in quotes as this character will get ignored in most shells.  
 `./controller.py -c green`  
-`./controller.py -c '#00ff00`  
+`./controller.py -c '#00ff00'`  
 
 The other 3 types support multiple comma-seperated colours.  
 
