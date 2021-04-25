@@ -87,7 +87,7 @@ if args.preset:
 	if contents.get(args.preset).get('type') in ['single', 'strobe', 'fade', 'breathe']:
 		type = contents.get(args.preset).get('type')
 	else:
-		print("Please specify a type in your preset. The following types are availabke: colour, stroble, fade, breathe")
+		print("Please specify a type in your preset. The following types are available: colour, stroble, fade, breathe")
 		exit
 
 	# Check if time is specified in the preset
