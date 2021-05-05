@@ -29,22 +29,53 @@ Connect to an address:
 
 There are 4 types of colour settings: single, strobe, fade and breathe.  
 
+### Static
+
+<img src="https://raw.githubusercontent.com/diademiemi/Pi-RGB/main/img/static.jpg" align="right" title="Static colour" width="128" height="128" />  
+
 To set a single static colour, pass `-c` followed by a colour name as defined by [W4C](https://www.w3.org/TR/css-color-3/#svg-color) or a 6-digit hex code. To use a hex code, prefix it with #, this will likely require you to escape the argument in quotes as this character will get ignored in most shells.  
 `./controller.py -c green`  
 `./controller.py -c '#00ff00'`  
 
 The other 3 types support multiple comma-seperated colours.  
 
+
+
+### Strobe
+
+<img src="https://raw.githubusercontent.com/diademiemi/Pi-RGB/main/img/strobe.gif" align="right" title="Strobing red, green and blue" width="128" height="128" />  
+
 The strobe effect will jump between the given colours in order, without an animation.  
 `./controller.py -s red,green,blue`  
+
+
+
+### Time
+
+<img src="https://raw.githubusercontent.com/diademiemi/Pi-RGB/main/img/time.gif" align="right" title="Showing with 2.5 seconds instead of 1" width="128" height="128" />  
+
 For all the animated sequences, you can supply `-t` to set the time between colours, you can also set the default in `.env`, if neither of these are found, it will default to 1.0, one second.  
 `./controller.py -s red,green,blue -t 2.5`  
+
+
+
+### Fade
+
+<img src="https://raw.githubusercontent.com/diademiemi/Pi-RGB/main/img/fade.gif" align="right" title="Fading black, purple, white and yellow" width="128" height="128" />  
 
 The fade effect will smoothly transition between the colours in order, and on the last one it will loop back to the first one.  
 `./controller.py -f black,purple,white,yellow`  
 
+
+
+### Breathe
+
+<img src="https://raw.githubusercontent.com/diademiemi/Pi-RGB/main/img/breathe.gif" align="right" title="Breathing aqua, deep pink, white and deep pink" width="128" height="128" />  
+
 The breathe effect will fade from black, to the colours while fading to black in between. Black is counted as a colour, so by default, every specified colour will take 2 seconds, instead of the usual 1.  
 `./controller.py -b aqua,deeppink,white,deeppink`  
+
+
 
 ### Presets
 
