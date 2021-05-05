@@ -28,14 +28,14 @@ args = parser.parse_args()
 if args.address is not None:
 	address = args.address
 else:
-	address = os.getenv('LISTEN_ADDRESS')
+	address = os.getenv('CONNECT_ADDRESS')
 	if address is None:
 		address = '127.0.0.1'
 
 if args.port is not None:
 	port = args.port
 else:
-	port = int(os.getenv('LISTEN_PORT'))
+	port = int(os.getenv('CONNECT_PORT'))
 	if port is None:
 		port = 5807
 
