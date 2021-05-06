@@ -33,7 +33,7 @@ There are 4 types of colour settings: single, strobe, fade and breathe.
 
 <img src="https://raw.githubusercontent.com/diademiemi/Pi-RGB/main/img/static.jpg" align="right" title="Static colour" width="96" height="96" />  
 
-To set a single static colour, pass `-c` followed by a colour name as defined by [W4C](https://www.w3.org/TR/css-color-3/#svg-color) or a 6-digit hex code. To use a hex code, prefix it with #, this will likely require you to escape the argument in quotes as this character will get ignored in most shells.  
+To set a single static colour, pass `-c` followed by a colour name as defined by [W3C](https://www.w3.org/TR/css-color-3/#svg-color) or a 6-digit hex code. To use a hex code, prefix it with #, this will likely require you to escape the argument in quotes as this character will get ignored in most shells.  
 `./controller.py -c green`  
 `./controller.py -c '#00ff00'`  
 
